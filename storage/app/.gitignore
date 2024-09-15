@@ -1,3 +1,9 @@
 *
 !public/
+!public/newsSeeder/
+!public/newsSeeder/*
+!public/projectSeeder/
+!public/projectSeeder/*
+!public/sliderSeeder/
+!public/sliderSeeder/*
 !.gitignore
