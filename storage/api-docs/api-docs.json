@@ -1,0 +1,747 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation Moon Group",
+        "description": "API Documentation for Moon Group",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/moon-group-backend/public/api/news": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get all news",
+                "description": "Get all news",
+                "operationId": "71a7fb4708318b291d9c91001159c1ab",
+                "parameters": [
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all news",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewsCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/moon-group-backend/public/api/project": {
+            "get": {
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Get all projects",
+                "description": "Get all projects",
+                "operationId": "27b17e0656d41e7509d38eb3e5ddddae",
+                "parameters": [
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all projects",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProjectCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/moon-group-backend/public/api/slider": {
+            "get": {
+                "tags": [
+                    "Slider"
+                ],
+                "summary": "Get all slider images",
+                "description": "Get all slider images",
+                "operationId": "e26b594f679b18ffb7a2470f55869da2",
+                "parameters": [
+                    {
+                        "parameter": "all",
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all slider image",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "parameter": "page",
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "per_page",
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "parameter": "sort",
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort by column",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "parameter": "direction",
+                        "name": "direction",
+                        "in": "query",
+                        "description": "Sort direction",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SliderCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/moon-group-backend/public/api/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get list of users",
+                "operationId": "a3ed3b3950204d05689206a27364a802",
+                "parameters": [
+                    {
+                        "name": "names",
+                        "in": "query",
+                        "description": "Filter by names",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "typeuser_id",
+                        "in": "query",
+                        "description": "Filter by type user id",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "all",
+                        "in": "query",
+                        "description": "Get all items",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "PaginationLinks": {
+                "properties": {
+                    "first": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/moon-group-backend/public/api/path?page=1"
+                    },
+                    "last": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/moon-group-backend/public/api/path?page=4"
+                    },
+                    "prev": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "next": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/moon-group-backend/public/api/path?page=2"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMetaLinks": {
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/moon-group-backend/public/api/path?page=1"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "true"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": "4"
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationMetaLinks"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "https://develop.garzasoft.com/moon-group-backend/public/api/path"
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": "15"
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": "15"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": "60"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationError": {
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "The pagination must be an integer."
+                    }
+                },
+                "type": "object"
+            },
+            "Unauthenticated": {
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "NewsResource": {
+                "title": "NewsResource",
+                "description": "News resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Title"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "introduction": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "Image"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "1"
+                    },
+                    "category_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "NewsCollection": {
+                "title": "NewsCollection",
+                "description": "News resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/NewsResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectResource": {
+                "title": "ProjectResource",
+                "description": "Project resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Title"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-19"
+                    },
+                    "introduction": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "1"
+                    },
+                    "headerImage": {
+                        "type": "string",
+                        "example": "Image"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Image"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ProjectCollection": {
+                "title": "ProjectCollection",
+                "description": "Project resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProjectResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "SliderResource": {
+                "title": "SliderResource",
+                "description": "Slider resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "Image"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Title"
+                    },
+                    "order": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "SliderCollection": {
+                "title": "SliderCollection",
+                "description": "Slider resource collection",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SliderResource"
+                        }
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "Image": {
+                "title": "Image",
+                "description": "Image model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "Image"
+                    },
+                    "project_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "news_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "TypeUser": {
+                "title": "TypeUser",
+                "description": "TypeUser model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "lastnames": {
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "typeuser_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "typeuser": {
+                        "$ref": "#/components/schemas/TypeUser"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "News",
+            "description": "News"
+        },
+        {
+            "name": "Project",
+            "description": "Project"
+        },
+        {
+            "name": "Slider",
+            "description": "Slider"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}
