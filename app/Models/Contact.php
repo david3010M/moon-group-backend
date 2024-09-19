@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @OA\Schema(
+ *     schema="Contact",
+ *     required={"name", "subject", "email", "message"},
+ *     @OA\Property(property="name", type="string", example="John Doe"),
+ *     @OA\Property(property="subject", type="string", example="Subject"),
+ *     @OA\Property(property="email", type="string", example="mail@gmail.com"),
+ *     @OA\Property(property="message", type="string", example="Message")
+ * )
+ */
 class Contact extends Model
 {
     use HasFactory;

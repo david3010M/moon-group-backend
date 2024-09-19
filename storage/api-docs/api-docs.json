@@ -6,6 +6,108 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/moon-group-backend/public/api/contact": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get all contact messages",
+                "description": "Get all contact messages",
+                "operationId": "086392b5b7cb325cfb996dcff6ed0bb3",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contact"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Send a message",
+                "description": "Send a message",
+                "operationId": "920153db77b5bd341711017188b2ca8a",
+                "requestBody": {
+                    "description": "Pass contact details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreContactRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Message sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/moon-group-backend/public/api/news": {
             "get": {
                 "tags": [
@@ -481,6 +583,32 @@
                 },
                 "type": "object"
             },
+            "StoreContactRequest": {
+                "required": [
+                    "name",
+                    "subject",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Subject"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@gmail.com"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Message"
+                    }
+                },
+                "type": "object"
+            },
             "NewsResource": {
                 "title": "NewsResource",
                 "description": "News resource",
@@ -647,6 +775,33 @@
                 },
                 "type": "object"
             },
+            "Contact": {
+                "required": [
+                    "name",
+                    "subject",
+                    "email",
+                    "message"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "Subject"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "mail@gmail.com"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Message"
+                    }
+                },
+                "type": "object"
+            },
             "Image": {
                 "title": "Image",
                 "description": "Image model",
@@ -727,6 +882,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
         {
             "name": "News",
             "description": "News"
