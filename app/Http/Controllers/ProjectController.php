@@ -68,9 +68,23 @@ class ProjectController extends Controller
         return response()->json(['message' => 'Project created successfully'], 201);
     }
 
+    /**
+     * @OA\Get (
+     *     path="/moon-group-backend/public/api/project/{id}",
+     *     tags={"Project"},
+     *     summary="Get project by id",
+     *     description="Get project by id",
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Project id", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/ProjectResource")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Project not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Projecto no encontrado")))
+     * )
+     */
     public function show(int $id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) return response()->json(['message' => 'Projecto no encontrado'], 404);
+        return new ProjectResource($project);
     }
 
     public function update(UpdateProjectRequest $request, int $id)
