@@ -42,17 +42,31 @@ class NewsController extends Controller
         //
     }
 
-    public function show(News $news)
+    /**
+     * @OA\Get (
+     *     path="/moon-group-backend/public/api/news/{id}",
+     *     tags={"News"},
+     *     summary="Get news by id",
+     *     description="Get news by id",
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="News id", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(ref="#/components/schemas/NewsResource")),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Not found", @OA\JsonContent( @OA\Property(property="error", type="string", example="Noticia no encontrada")))
+     * )
+     */
+    public function show(int $id)
+    {
+        $news = News::find($id);
+        if (!$news) return response()->json(['error' => 'Noticia no encontrada'], 404);
+        return response()->json(new NewsResource($news));
+    }
+
+    public function update(UpdateNewsRequest $request, int $id)
     {
         //
     }
 
-    public function update(UpdateNewsRequest $request, News $news)
-    {
-        //
-    }
-
-    public function destroy(News $news)
+    public function destroy(int $id)
     {
         //
     }

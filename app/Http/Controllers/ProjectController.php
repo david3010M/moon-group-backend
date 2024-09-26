@@ -84,7 +84,7 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
         if (!$project) return response()->json(['message' => 'Projecto no encontrado'], 404);
-        return new ProjectResource($project);
+        return response()->json(new ProjectResource($project));
     }
 
     public function update(UpdateProjectRequest $request, int $id)
