@@ -2,27 +2,31 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateProjectRequest extends FormRequest
+/**
+ * @OA\Schema (
+ *     schema="UpdateProjectRequest",
+ *     title="UpdateProjectRequest",
+ *     type="object",
+ *     @OA\Property (property="title", type="string", example="Title"),
+ *     @OA\Property (property="date", type="string", format="date", example="2024-08-19"),
+ *     @OA\Property (property="introduction", type="string", example="Introduction"),
+ *     @OA\Property (property="description", type="string", example="Description"),
+ *     @OA\Property (property="headerImage", type="file", format="binary"),
+ *     @OA\Property (property="images[]", type="array", @OA\Items(type="file", format="binary"))
+ * )
+ */
+class UpdateProjectRequest extends UpdateRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'title' => 'nullable|string',
+            'date' => 'nullable|date',
+            'introduction' => 'nullable|string',
+            'description' => 'nullable|string',
+            'headerImage' => 'nullable|image',
+            'images' => 'nullable|array',
+            'images.*' => 'required|image',
         ];
     }
 }

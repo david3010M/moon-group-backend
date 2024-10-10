@@ -38,6 +38,19 @@ class ProjectController extends Controller
         );
     }
 
+    /**
+     * @OA\Post (
+     *     path="/moon-group-backend/public/api/project",
+     *     tags={"Project"},
+     *     summary="Create a project",
+     *     description="Create a project",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(@OA\MediaType(mediaType="multipart/form-data", @OA\Schema(ref="#/components/schemas/StoreProjectRequest"))),
+     *     @OA\Response(response=201, description="Project created successfully"),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))
+     * )
+     */
     public function store(StoreProjectRequest $request)
     {
         $project = Project::create($request->validated());
@@ -62,8 +75,8 @@ class ProjectController extends Controller
             $path = $image->storeAs('project/' . $project->id, $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
             $project->headerImage = $routeImage;
-            $project->save();
         }
+        $project->save();
 
         return response()->json(['message' => 'Project created successfully'], 201);
     }
@@ -87,13 +100,78 @@ class ProjectController extends Controller
         return response()->json(new ProjectResource($project));
     }
 
+    /**
+     * @OA\Post (
+     *     path="/moon-group-backend/public/api/project/update/{id}",
+     *     tags={"Project"},
+     *     summary="Update a project",
+     *     description="Update a project",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Project id", @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\MediaType(mediaType="multipart/form-data", @OA\Schema(ref="#/components/schemas/UpdateProjectRequest"))),
+     *     @OA\Response(response=200, description="Project updated successfully"),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Project not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Projecto no encontrado")))
+     * )
+     */
     public function update(UpdateProjectRequest $request, int $id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) return response()->json(['message' => 'Proyecto no encontrado'], 404);
+
+        $data = [
+            'title' => $request->input('title') ?? $project->title,
+            'date' => $request->input('date') ?? $project->date,
+            'introduction' => $request->input('introduction') ?? $project->introduction,
+            'description' => $request->input('description') ?? $project->description,
+        ];
+        $project->update($data);
+
+        $images = $request->file('images') ?? [];
+        if ($images) $project->images()->delete();
+        foreach ($images as $image) {
+            $filename = $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
+            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
+            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+            Image::create([
+                'route' => $routeImage,
+                'project_id' => $project->id,
+            ]);
+        }
+
+        $image = $request->file('headerImage');
+        if (!$image) {
+            $images = $project->images;
+            $project->headerImage = $images[0]->route;
+        } else {
+            $filename = 'header_' . $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
+            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
+            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+            $project->headerImage = $routeImage;
+        }
+        $project->save();
+
+        return response()->json(['message' => 'Project updated successfully']);
     }
 
+    /**
+     * @OA\Delete (
+     *     path="/moon-group-backend/public/api/project/{id}",
+     *     tags={"Project"},
+     *     summary="Delete a project",
+     *     description="Delete a project",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Project id", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Project deleted successfully"),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Project not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Projecto no encontrado")))
+     * )
+     */
     public function destroy(int $id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) return response()->json(['message' => 'Projecto no encontrado'], 404);
+        $project->delete();
+        return response()->json(['message' => 'Projecto eliminado correctamente']);
     }
 }

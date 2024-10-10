@@ -33,8 +33,8 @@ Route::group([], function () {
      */
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
-    Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('project', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('project/{project}', [ProjectController::class, 'show'])->name('projects.show');
     Route::get('news', [NewsController::class, 'index'])->name('news.index');
     Route::get('news/{news}', [NewsController::class, 'show'])->name('news.show');
     Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
@@ -77,15 +77,9 @@ Route::group([], function () {
         );
 
 //    PROJECTS
-        Route::resource('project', ProjectController::class)->only(
-            ['store', 'update', 'destroy']
-        )->names(
-            [
-                'store' => 'projects.store',
-                'update' => 'projects.update',
-                'destroy' => 'projects.destroy',
-            ]
-        );
+        Route::post('project', [ProjectController::class, 'store'])->name('project.store');
+        Route::post('project/update/{project}', [ProjectController::class, 'update'])->name('project.update');
+        Route::delete('project/{project}', [ProjectController::class, 'destroy'])->name('project.destroy');
 
 //    NEWS
         Route::post('news', [NewsController::class, 'store'])->name('news.store');
