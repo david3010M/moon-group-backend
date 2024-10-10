@@ -87,15 +87,8 @@ Route::group([], function () {
         Route::delete('news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
 
 //    SLIDER
-        Route::resource('slider', SliderController::class)->only(
-            ['store', 'update', 'destroy']
-        )->names(
-            [
-                'store' => 'slider.store',
-                'update' => 'slider.update',
-                'destroy' => 'slider.destroy',
-            ]
-        );
+        Route::post('slider', [SliderController::class, 'store'])->name('slider.store');
+        Route::delete('slider/{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
 
 //    CONTACT
         Route::resource('contact', ContactController::class)->only(
