@@ -39,7 +39,7 @@ Route::group([], function () {
     Route::get('news/{news}', [NewsController::class, 'show'])->name('news.show');
     Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
     Route::get('slider/{slider}', [SliderController::class, 'show'])->name('slider.show');
-    Route::get('contact', [ContactController::class, 'store'])->name('contact.store');
+    Route::post('contact', [ContactController::class, 'store'])->name('contact.store');
 
     /**
      * ADMIN ROUTES WITH AUTH
