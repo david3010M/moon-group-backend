@@ -14,6 +14,7 @@ class ContactController extends Controller
      *     tags={"Contact"},
      *     summary="Get all contact messages",
      *     description="Get all contact messages",
+     *     security={{"bearerAuth": {}}},
      *     @OA\Response(response=200, description="Successful operation", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Contact"))),
      *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
      *     @OA\Response(response=422, description="Validation error", @OA\JsonContent(ref="#/components/schemas/ValidationError"))

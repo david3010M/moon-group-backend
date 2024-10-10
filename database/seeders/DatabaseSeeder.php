@@ -7,6 +7,7 @@ use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,12 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $array = [
+            ['names' => 'Moon Group', 'lastnames' => 'Admin', 'username' => 'admin', 'password' => Hash::make('12345678')],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($array as $value) {
+            User::create($value);
+        }
+
+        $this->call(GroupMenuSeeder::class);
+        $this->call(OptionMenuSeeder::class);
 
         $this->call(ProjectSeeder::class);
         $this->call(ImageSeeder::class);

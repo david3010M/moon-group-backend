@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GroupMenuController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\OptionMenuController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SliderController;
 use Illuminate\Http\Request;
@@ -24,57 +28,104 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group([], function () {
+    /**
+     * PUBLIC ROUTES
+     */
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('news', [NewsController::class, 'index'])->name('news.index');
+    Route::get('news/{news}', [NewsController::class, 'show'])->name('news.show');
+    Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
+    Route::get('slider/{slider}', [SliderController::class, 'show'])->name('slider.show');
+    Route::get('contact', [ContactController::class, 'store'])->name('contact.store');
+
+    /**
+     * ADMIN ROUTES WITH AUTH
+     */
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+
+        Route::get('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
+        Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/logs', [AuthController::class, 'logs'])->name('logs');
+
+//        GROUP MENU
+        Route::resource('groupmenu', GroupMenuController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'groupmenu.index',
+                'store' => 'groupmenu.store',
+                'show' => 'groupmenu.show',
+                'update' => 'groupmenu.update',
+                'destroy' => 'groupmenu.destroy',
+            ]
+        );
+
+//        OPTION MENU
+        Route::resource('optionmenu', OptionMenuController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'optionmenu.index',
+                'store' => 'optionmenu.store',
+                'show' => 'optionmenu.show',
+                'update' => 'optionmenu.update',
+                'destroy' => 'optionmenu.destroy',
+            ]
+        );
 
 //    PROJECTS
-    Route::resource('project', ProjectController::class)->only(
-        ['index', 'show', 'store', 'update', 'destroy']
-    )->names(
-        [
-            'index' => 'projects.index',
-            'store' => 'projects.store',
-            'show' => 'projects.show',
-            'update' => 'projects.update',
-            'destroy' => 'projects.destroy',
-        ]
-    );
+        Route::resource('project', ProjectController::class)->only(
+            ['store', 'update', 'destroy']
+        )->names(
+            [
+                'store' => 'projects.store',
+                'update' => 'projects.update',
+                'destroy' => 'projects.destroy',
+            ]
+        );
 
 //    NEWS
-    Route::resource('news', NewsController::class)->only(
-        ['index', 'show', 'store', 'update', 'destroy']
-    )->names(
-        [
-            'index' => 'news.index',
-            'store' => 'news.store',
-            'show' => 'news.show',
-            'update' => 'news.update',
-            'destroy' => 'news.destroy',
-        ]
-    );
+        Route::post('news', [NewsController::class, 'store'])->name('news.store');
+        Route::post('news/update/{news}', [NewsController::class, 'update'])->name('news.update');
+        Route::delete('news/{news}', [NewsController::class, 'destroy'])->name('news.destroy');
 
 //    SLIDER
-    Route::resource('slider', SliderController::class)->only(
-        ['index', 'show', 'store', 'update', 'destroy']
-    )->names(
-        [
-            'index' => 'slider.index',
-            'store' => 'slider.store',
-            'show' => 'slider.show',
-            'update' => 'slider.update',
-            'destroy' => 'slider.destroy',
-        ]
-    );
+        Route::resource('slider', SliderController::class)->only(
+            ['store', 'update', 'destroy']
+        )->names(
+            [
+                'store' => 'slider.store',
+                'update' => 'slider.update',
+                'destroy' => 'slider.destroy',
+            ]
+        );
 
 //    CONTACT
-    Route::resource('contact', ContactController::class)->only(
-        ['index', 'show', 'store', 'update', 'destroy']
-    )->names(
-        [
-            'index' => 'contact.index',
-            'store' => 'contact.store',
-            'show' => 'contact.show',
-            'update' => 'contact.update',
-            'destroy' => 'contact.destroy',
-        ]
-    );
+        Route::resource('contact', ContactController::class)->only(
+            ['index', 'show', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'contact.index',
+                'show' => 'contact.show',
+                'update' => 'contact.update',
+                'destroy' => 'contact.destroy',
+            ]
+        );
 
+//        CATEGORIES
+        Route::resource('category', CategoryController::class)->only(
+            ['index', 'show', 'store', 'update', 'destroy']
+        )->names(
+            [
+                'index' => 'category.index',
+                'store' => 'category.store',
+                'show' => 'category.show',
+                'update' => 'category.update',
+                'destroy' => 'category.destroy',
+            ]
+        );
+    });
 });

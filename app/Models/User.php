@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @OA\Schema(
@@ -16,45 +17,44 @@ use Illuminate\Notifications\Notifiable;
  *     @OA\Property( property="names", type="string", example="John" ),
  *     @OA\Property( property="lastnames", type="string", example="Doe" ),
  *     @OA\Property( property="username", type="string", example="johndoe" ),
- *     @OA\Property( property="typeuser_id", type="integer", example="1" ),
- *     @OA\Property( property="typeuser", type="object", ref="#/components/schemas/TypeUser" ),
  * )
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
+        'names',
+        'lastnames',
+        'username',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    const filters = [
+        'names' => 'like',
+        'lastnames' => 'like',
+        'username' => 'like',
+        'typeuser_id' => 'like',
+    ];
+
+    const sorts = [
+        'id',
+        'names',
+        'lastnames',
+        'username',
+        'typeuser_id',
+    ];
 }

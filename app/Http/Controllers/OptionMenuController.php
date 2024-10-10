@@ -2,64 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GroupMenu;
 use App\Models\OptionMenu;
 use App\Http\Requests\StoreOptionMenuRequest;
 use App\Http\Requests\UpdateOptionMenuRequest;
+use Illuminate\Http\Request;
 
 class OptionMenuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(OptionMenu::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOptionMenuRequest $request)
+    public function show(int $id)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(OptionMenu $optionMenu)
+    public function update(Request $request, int $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(OptionMenu $optionMenu)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOptionMenuRequest $request, OptionMenu $optionMenu)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(OptionMenu $optionMenu)
+    public function destroy(int $id)
     {
         //
     }

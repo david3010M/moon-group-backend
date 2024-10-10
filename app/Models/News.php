@@ -17,6 +17,7 @@ class News extends Model
         'introduction',
         'description',
         'image',
+        'active',
         'category_id',
     ];
 
