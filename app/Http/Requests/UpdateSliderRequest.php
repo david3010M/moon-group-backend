@@ -18,7 +18,7 @@ class UpdateSliderRequest extends UpdateRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
+            'title' => 'nullable|string',
             'order' => 'nullable|integer',
             'active' => 'nullable|string|in:true,false',
             'image' => 'nullable|image',
