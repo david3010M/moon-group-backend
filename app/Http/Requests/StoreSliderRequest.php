@@ -18,6 +18,8 @@ class StoreSliderRequest extends StoreRequest
     {
         return [
             'title' => 'nullable|string',
+            'images' => 'required|array',
+            'images.*' => 'required|image',
         ];
     }
 }
