@@ -115,7 +115,7 @@ class SliderController extends Controller
             'active' => $request->input('active') === 'true' ?? $slider->active,
         ]);
         $image = $request->file('image');
-        if ($image) {
+        if ($request->hasFile('image')) {
             $currentTime = now();
             $originalName = str_replace(' ', '_', $image->getClientOriginalName());
             $filename = $currentTime->format('YmdHis') . '_' . $originalName;
