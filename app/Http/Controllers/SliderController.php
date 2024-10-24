@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndexSliderRequest;
+use App\Http\Requests\UpdateSliderRequest;
 use App\Http\Resources\SliderResource;
 use App\Models\Slider;
 use App\Http\Requests\StoreSliderRequest;
@@ -54,15 +55,11 @@ class SliderController extends Controller
         $images = $request->file('images') ?? [];
         foreach ($images as $index => $image) {
             $file = $image;
-
             $currentTime = now();
-
             $originalName = str_replace(' ', '_', $file->getClientOriginalName());
-
             $filename = ($index + 1) . '-' . $currentTime->format('YmdHis') . '_' . $originalName;
             $path = $file->storeAs('slider', $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
-
             $dataImage = [
                 'title' => $request->title,
                 'route' => $routeImage,
@@ -91,6 +88,42 @@ class SliderController extends Controller
         $slider = Slider::find($id);
         if (!$slider) return response()->json(['message' => 'Slider not found'], 404);
         return response()->json(['data' => new SliderResource($slider)]);
+    }
+
+    /**
+     * @OA\Post (
+     *     path="/moon-group-backend/public/api/slider/update/{id}",
+     *     tags={"Slider"},
+     *     summary="Update slider image",
+     *     description="Update slider image",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Slider ID", @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\MediaType(mediaType="multipart/form-data", @OA\Schema(ref="#/components/schemas/UpdateSliderRequest"))),
+     *     @OA\Response(response=200, description="Slider updated successfully", @OA\JsonContent(@OA\Property(property="message", type="string", example="Slider updated successfully"))),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Slider not found", @OA\JsonContent(@OA\Property(property="message", type="string", example="Slider not found")))
+     * )
+     */
+    public function update(UpdateSliderRequest $request, int $id)
+    {
+        $slider = Slider::find($id);
+        if (!$slider) return response()->json(['message' => 'Slider not found'], 404);
+        $slider->update([
+            'title' => $request->input('title') ?? $slider->title,
+            'order' => $request->input('order') ?? $slider->order,
+            'status' => $request->input('status') ?? $slider->status,
+            'active' => $request->input('active') === 'true' ?? $slider->active,
+        ]);
+        $image = $request->file('image');
+        if ($image) {
+            $currentTime = now();
+            $originalName = str_replace(' ', '_', $image->getClientOriginalName());
+            $filename = $currentTime->format('YmdHis') . '_' . $originalName;
+            $path = $image->storeAs('slider', $filename, 'public');
+            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+            $slider->update(['route' => $routeImage]);
+        }
+        return response()->json(['message' => 'Slider updated successfully']);
     }
 
     /**

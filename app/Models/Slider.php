@@ -19,7 +19,7 @@ class Slider extends Model
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'active' => 'boolean',
     ];
 
     protected $hidden = [
@@ -32,7 +32,7 @@ class Slider extends Model
         'route' => 'like',
         'title' => 'like',
         'order' => 'like',
-        'active' => 'like',
+        'active' => '=',
     ];
 
     const sorts = [

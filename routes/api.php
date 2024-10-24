@@ -88,6 +88,7 @@ Route::group([], function () {
 
 //    SLIDER
         Route::post('slider', [SliderController::class, 'store'])->name('slider.store');
+        Route::post('slider/update/{slider}', [SliderController::class, 'update'])->name('slider.update');
         Route::delete('slider/{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
 
 //    CONTACT

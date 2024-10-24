@@ -1673,6 +1673,86 @@
                 ]
             }
         },
+        "/moon-group-backend/public/api/slider/update/{id}": {
+            "post": {
+                "tags": [
+                    "Slider"
+                ],
+                "summary": "Update slider image",
+                "description": "Update slider image",
+                "operationId": "19f60a08d7b9186e24167739c3140a06",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Slider ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSliderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Slider updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Slider updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Slider not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Slider not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/moon-group-backend/public/api/user": {
             "get": {
                 "tags": [
@@ -2073,6 +2153,28 @@
                             "type": "file",
                             "format": "binary"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateSliderRequest": {
+                "title": "UpdateSliderRequest",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Title"
+                    },
+                    "order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "active": {
+                        "type": "string",
+                        "example": "true"
+                    },
+                    "image": {
+                        "type": "file",
+                        "format": "binary"
                     }
                 },
                 "type": "object"
