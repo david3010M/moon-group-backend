@@ -121,9 +121,12 @@ class ProjectController extends Controller
 
         $data = [
             'title' => $request->input('title') ?? $project->title,
+            'titleEn' => $request->input('titleEn') ?? $project->titleEn,
             'date' => $request->input('date') ?? $project->date,
             'introduction' => $request->input('introduction') ?? $project->introduction,
+            'introductionEn' => $request->input('introductionEn') ?? $project->introductionEn,
             'description' => $request->input('description') ?? $project->description,
+            'descriptionEn' => $request->input('descriptionEn') ?? $project->descriptionEn,
         ];
         $project->update($data);
 

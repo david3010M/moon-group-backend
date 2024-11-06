@@ -55,9 +55,12 @@ class NewsController extends Controller
     {
         $data = [
             'title' => $request->title,
+            'titleEn' => $request->titleEn,
             'date' => $request->date,
             'introduction' => $request->introduction,
+            'introductionEn' => $request->introductionEn,
             'description' => $request->description,
+            'descriptionEn' => $request->descriptionEn,
             'category_id' => $request->category_id,
             'active' => true,
         ];
@@ -120,9 +123,12 @@ class NewsController extends Controller
 
         $data = [
             'title' => $request->title,
+            'titleEn' => $request->titleEn,
             'date' => $request->date,
             'introduction' => $request->introduction,
+            'introductionEn' => $request->introductionEn,
             'description' => $request->description,
+            'descriptionEn' => $request->descriptionEn,
             'category_id' => $request->category_id,
             'active' => true,
         ];

@@ -22,9 +22,12 @@ class UpdateNewsRequest extends UpdateRequest
     {
         return [
             'title' => 'required|string',
+            'titleEn' => 'required|string',
             'date' => 'required|date',
             'introduction' => 'required|string',
+            'introductionEn' => 'required|string',
             'description' => 'required|string',
+            'descriptionEn' => 'required|string',
             'image' => 'required|image',
             'category_id' => 'nullable|integer',
         ];

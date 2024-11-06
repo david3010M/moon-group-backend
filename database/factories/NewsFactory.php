@@ -14,9 +14,12 @@ class NewsFactory extends Factory
         ];
         return [
             'title' => $this->faker->sentence,
+            'titleEn' => $this->faker->sentence,
             'date' => $this->faker->date,
             'introduction' => $this->faker->sentence,
+            'introductionEn' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
+            'descriptionEn' => $this->faker->paragraph,
             'image' => $images[rand(0, 1)],
             'category_id' => null,
         ];

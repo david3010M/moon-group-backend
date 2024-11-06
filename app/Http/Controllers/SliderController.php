@@ -116,6 +116,11 @@ class SliderController extends Controller
         ]);
         $image = $request->file('image');
         if ($request->hasFile('image')) {
+            /**
+             * if ($object->pathPhoto) {
+             * Storage::delete(str_replace('/storage/', 'public/', $object->pathPhoto));
+             * }
+             */
             $currentTime = now();
             $originalName = str_replace(' ', '_', $image->getClientOriginalName());
             $filename = $currentTime->format('YmdHis') . '_' . $originalName;

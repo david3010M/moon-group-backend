@@ -11,9 +11,12 @@ class ProjectFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence,
+            'titleEn' => $this->faker->sentence,
             'date' => Carbon::create(2024)->addDays(rand(0, 250))->format('Y-m-d'),
             'introduction' => $this->faker->paragraph,
+            'introductionEn' => $this->faker->paragraph,
             'description' => $this->faker->paragraph,
+            'descriptionEn' => $this->faker->paragraph,
             'active' => true,
         ];
     }

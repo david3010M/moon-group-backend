@@ -21,9 +21,12 @@ class UpdateProjectRequest extends UpdateRequest
     {
         return [
             'title' => 'nullable|string',
+            'titleEn' => 'nullable|string',
             'date' => 'nullable|date',
             'introduction' => 'nullable|string',
+            'introductionEn' => 'nullable|string',
             'description' => 'nullable|string',
+            'descriptionEn' => 'nullable|string',
             'headerImage' => 'nullable|image',
             'images' => 'nullable|array',
             'images.*' => 'required|image',

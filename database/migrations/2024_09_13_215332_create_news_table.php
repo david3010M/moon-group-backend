@@ -13,9 +13,12 @@ return new class extends Migration {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('titleEn');
             $table->string('date');
             $table->string('introduction');
+            $table->string('introductionEn');
             $table->text('description');
+            $table->text('descriptionEn');
             $table->string('image');
             $table->boolean('active')->default(true);
             $table->foreignId('category_id')->nullable()->constrained();
