@@ -24,14 +24,14 @@ class UpdateNewsRequest extends UpdateRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
-            'titleEn' => 'required|string',
-            'date' => 'required|date',
-            'introduction' => 'required|string',
-            'introductionEn' => 'required|string',
-            'description' => 'required|string',
-            'descriptionEn' => 'required|string',
-            'image' => 'required|image',
+            'title' => 'nullable|string',
+            'titleEn' => 'nullable|string',
+            'date' => 'nullable|date',
+            'introduction' => 'nullable|string',
+            'introductionEn' => 'nullable|string',
+            'description' => 'nullable|string',
+            'descriptionEn' => 'nullable|string',
+            'image' => 'nullable|image',
             'category_id' => 'nullable|integer',
         ];
     }

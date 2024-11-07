@@ -25,12 +25,12 @@ class StoreProjectRequest extends StoreRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'titleEn' => 'nullable|string|max:255',
+            'titleEn' => 'required|string|max:255',
             'date' => 'required|date',
             'introduction' => 'required|string',
-            'introductionEn' => 'nullable|string',
+            'introductionEn' => 'required|string',
             'description' => 'required|string',
-            'descriptionEn' => 'nullable|string',
+            'descriptionEn' => 'required|string',
             'headerImage' => 'nullable|image',
             'images' => 'required|array',
             'images.*' => 'required|image',
