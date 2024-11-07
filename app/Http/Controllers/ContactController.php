@@ -43,7 +43,7 @@ class ContactController extends Controller
     public function store(StoreContactRequest $request)
     {
         $contact = Contact::create($request->validated());
-        Mail::to("selene.gamarra@moongroup.com.pe")->send(new ContactInformation($contact));
+        Mail::to("hvaldiviezos@unprg.edu.pe")->send(new ContactInformation($contact));
         return response()->json(['message' => 'Mensaje enviado correctamente']);
     }
 

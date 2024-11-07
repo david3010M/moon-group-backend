@@ -310,7 +310,7 @@
                                                         <img
                                                             alt=""
                                                             height="auto"
-                                                            src="images/Logo_Principal_blanco.png"
+                                                            src="MoonGroupLogo.png"
                                                             style="
                                           display: block;
                                           height: auto;
