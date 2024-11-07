@@ -310,7 +310,7 @@
                                                         <img
                                                             alt=""
                                                             height="auto"
-                                                            src="MoonGroupLogo.png"
+                                                            src="https://develop.garzasoft.com/moon-group-backend/public/images/MoonGroupLogo.png"
                                                             style="
                                           display: block;
                                           height: auto;
