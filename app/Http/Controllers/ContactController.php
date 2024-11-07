@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmComplaint;
+use App\Mail\ContactInformation;
 use App\Models\Contact;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -39,8 +42,9 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        Contact::create($request->validated());
-        return response()->json(['message' => 'Message sent successfully']);
+        $contact = Contact::create($request->validated());
+        Mail::to("selene.gamarra@moongroup.com.pe")->send(new ContactInformation($contact));
+        return response()->json(['message' => 'Mensaje enviado correctamente']);
     }
 
     public function show(int $id)
