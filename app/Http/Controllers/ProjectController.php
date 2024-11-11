@@ -131,7 +131,6 @@ class ProjectController extends Controller
         $project->update($data);
 
         $images = $request->file('images') ?? [];
-        if ($images) $project->images()->delete();
         foreach ($images as $image) {
             $filename = $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
             $path = $image->storeAs('project/' . $project->id, $filename, 'public');
