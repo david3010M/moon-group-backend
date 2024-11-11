@@ -1386,6 +1386,64 @@
                 ]
             }
         },
+        "/moon-group-backend/public/api/image/{id}": {
+            "delete": {
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Delete an image",
+                "description": "Delete an image",
+                "operationId": "429e236f92a3b7d69484268d94038eb8",
+                "parameters": [
+                    {
+                        "parameter": "id",
+                        "name": "id",
+                        "in": "path",
+                        "description": "Image id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Unauthenticated"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Image not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Imagen no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/moon-group-backend/public/api/slider": {
             "get": {
                 "tags": [
@@ -1987,6 +2045,10 @@
                         "type": "string",
                         "example": "Title"
                     },
+                    "titleEn": {
+                        "type": "string",
+                        "example": "Title"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date",
@@ -1996,7 +2058,15 @@
                         "type": "string",
                         "example": "Introduction"
                     },
+                    "introductionEn": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
                     "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "descriptionEn": {
                         "type": "string",
                         "example": "Description"
                     },
@@ -2025,6 +2095,10 @@
                         "type": "string",
                         "example": "Title"
                     },
+                    "titleEn": {
+                        "type": "string",
+                        "example": "Title"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date",
@@ -2034,7 +2108,15 @@
                         "type": "string",
                         "example": "Introduction"
                     },
+                    "introductionEn": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
                     "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "descriptionEn": {
                         "type": "string",
                         "example": "Description"
                     },
@@ -2099,6 +2181,10 @@
                         "type": "string",
                         "example": "Title"
                     },
+                    "titleEn": {
+                        "type": "string",
+                        "example": "Title"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date",
@@ -2108,7 +2194,15 @@
                         "type": "string",
                         "example": "Introduction"
                     },
+                    "introductionEn": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
                     "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "descriptionEn": {
                         "type": "string",
                         "example": "Description"
                     },
@@ -2130,6 +2224,10 @@
                         "type": "string",
                         "example": "Title"
                     },
+                    "titleEn": {
+                        "type": "string",
+                        "example": "Title"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date",
@@ -2139,7 +2237,15 @@
                         "type": "string",
                         "example": "Introduction"
                     },
+                    "introductionEn": {
+                        "type": "string",
+                        "example": "Introduction"
+                    },
                     "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
+                    "descriptionEn": {
                         "type": "string",
                         "example": "Description"
                     },
@@ -2590,6 +2696,10 @@
         {
             "name": "Project",
             "description": "Project"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
         },
         {
             "name": "Slider",

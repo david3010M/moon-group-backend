@@ -159,6 +159,27 @@ class ProjectController extends Controller
 
     /**
      * @OA\Delete (
+     *     path="/moon-group-backend/public/api/image/{id}",
+     *     tags={"Image"},
+     *     summary="Delete an image",
+     *     description="Delete an image",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(parameter="id", name="id", in="path", required=true, description="Image id", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Image deleted successfully"),
+     *     @OA\Response(response=401, description="Unauthenticated", @OA\JsonContent(ref="#/components/schemas/Unauthenticated")),
+     *     @OA\Response(response=404, description="Image not found", @OA\JsonContent( @OA\Property(property="message", type="string", example="Imagen no encontrada")))
+     * )
+     */
+    public function deleteImage(int $id)
+    {
+        $image = Image::find($id);
+        if (!$image) return response()->json(['message' => 'Imagen no encontrada'], 404);
+        $image->delete();
+        return response()->json(['message' => 'Imagen eliminada correctamente']);
+    }
+
+    /**
+     * @OA\Delete (
      *     path="/moon-group-backend/public/api/project/{id}",
      *     tags={"Project"},
      *     summary="Delete a project",

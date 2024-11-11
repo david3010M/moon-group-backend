@@ -91,6 +91,9 @@ Route::group([], function () {
         Route::post('slider/update/{slider}', [SliderController::class, 'update'])->name('slider.update');
         Route::delete('slider/{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
 
+//    IMAGES
+        Route::delete('image/{image}', [ProjectController::class, 'deleteImage'])->name('image.deleteImage');
+
 //    CONTACT
         Route::resource('contact', ContactController::class)->only(
             ['index', 'show', 'update', 'destroy']
