@@ -30,9 +30,9 @@ class UpdateProjectRequest extends UpdateRequest
             'introductionEn' => 'nullable|string',
             'description' => 'nullable|string',
             'descriptionEn' => 'nullable|string',
-            'headerImage' => 'nullable|image',
+            'headerImage' => 'nullable',
             'images' => 'nullable|array',
-            'images.*' => 'required|image',
+            'images.*' => 'required',
         ];
     }
 }

@@ -142,10 +142,7 @@ class ProjectController extends Controller
         }
 
         $image = $request->file('headerImage');
-        if (!$image) {
-            $images = $project->images;
-            $project->headerImage = $images[0]->route;
-        } else {
+        if ($image) {
             $filename = 'header_' . $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
             $path = $image->storeAs('project/' . $project->id, $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;

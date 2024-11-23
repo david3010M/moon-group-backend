@@ -31,7 +31,7 @@ class UpdateNewsRequest extends UpdateRequest
             'introductionEn' => 'nullable|string',
             'description' => 'nullable|string',
             'descriptionEn' => 'nullable|string',
-            'image' => 'nullable|image',
+            'image' => 'nullable',
             'category_id' => 'nullable|integer',
         ];
     }
