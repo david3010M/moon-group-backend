@@ -31,7 +31,7 @@ class StoreNewsRequest extends StoreRequest
             'introductionEn' => 'required|string',
             'description' => 'required|string',
             'descriptionEn' => 'required|string',
-            'image' => 'required',
+            'image' => 'required|file',
             'category_id' => 'nullable|integer',
         ];
     }

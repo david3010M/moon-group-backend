@@ -31,9 +31,9 @@ class StoreProjectRequest extends StoreRequest
             'introductionEn' => 'required|string',
             'description' => 'required|string',
             'descriptionEn' => 'required|string',
-            'headerImage' => 'nullable',
+            'headerImage' => 'nullable|file',
             'images' => 'required|array',
-            'images.*' => 'required',
+            'images.*' => 'required|file',
         ];
     }
 }
