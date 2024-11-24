@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Models\RouteImages;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -73,7 +74,8 @@ class NewsController extends Controller
             $originalName = str_replace(' ', '_', $file->getClientOriginalName());
 
             $filename = $currentTime->format('YmdHis') . '_' . $originalName;
-            $path = $file->storeAs('public/news', $filename);
+            $path = Storage::disk('public')->putFileAs('news', $file, $filename);
+//            $path = $file->storeAs('public/news', $filename);
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/' . $path;
             $data['image'] = $routeImage;
         }
@@ -141,7 +143,8 @@ class NewsController extends Controller
             $originalName = str_replace(' ', '_', $file->getClientOriginalName());
 
             $filename = $currentTime->format('YmdHis') . '_' . $originalName;
-            $path = $file->storeAs('public/news', $filename);
+            $path = Storage::disk('public')->putFileAs('news', $file, $filename);
+//            $path = $file->storeAs('public/news', $filename);
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/' . $path;
             $data['image'] = $routeImage;
         }

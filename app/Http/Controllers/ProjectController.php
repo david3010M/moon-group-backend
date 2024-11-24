@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -58,7 +59,8 @@ class ProjectController extends Controller
         $images = $request->file('images') ?? [];
         foreach ($images as $image) {
             $filename = $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
-            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
+            $path = Storage::disk('public')->putFileAs('project/' . $project->id, $image, $filename);
+//            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
             Image::create([
                 'route' => $routeImage,
@@ -133,7 +135,8 @@ class ProjectController extends Controller
         $images = $request->file('images') ?? [];
         foreach ($images as $image) {
             $filename = $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
-            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
+            $path = Storage::disk('public')->putFileAs('project/' . $project->id, $image, $filename);
+//            $path = $image->storeAs('project/' . $project->id, $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
             Image::create([
                 'route' => $routeImage,
@@ -142,7 +145,11 @@ class ProjectController extends Controller
         }
 
         $image = $request->file('headerImage');
-        if ($image) {
+
+        if (!$image && !$project->headerImage) {
+            $images = $project->images;
+            $project->headerImage = $images[0]->route;
+        } else {
             $filename = 'header_' . $project->id . '_' . str_replace(' ', '_', $image->getClientOriginalName());
             $path = $image->storeAs('project/' . $project->id, $filename, 'public');
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
