@@ -31,7 +31,7 @@ class StoreNewsRequest extends StoreRequest
             'introductionEn' => 'required|string',
             'description' => 'required|string',
             'descriptionEn' => 'required|string',
-            'image' => 'required|file',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
             'category_id' => 'nullable|integer',
         ];
     }

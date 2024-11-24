@@ -15,6 +15,7 @@ class CategoryController extends Controller
      *     tags={"Categories"},
      *     summary="Get all categories",
      *     description="Get all categories",
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(parameter="all", name="all", in="query", required=false, description="Get all categories", @OA\Schema(type="boolean")),
      *     @OA\Parameter(parameter="page", name="page", in="query", required=false, description="Page number", @OA\Schema(type="integer")),
      *     @OA\Parameter(parameter="per_page", name="per_page", in="query", required=false, description="Items per page", @OA\Schema(type="integer")),

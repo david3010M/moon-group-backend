@@ -19,7 +19,7 @@ class StoreSliderRequest extends StoreRequest
         return [
             'title' => 'nullable|string',
             'images' => 'required|array',
-            'images.*' => 'required|image',
+            'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
         ];
     }
 }

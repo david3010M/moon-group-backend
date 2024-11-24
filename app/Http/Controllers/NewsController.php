@@ -64,26 +64,27 @@ class NewsController extends Controller
             'introductionEn' => $request->introductionEn,
             'description' => $request->description,
             'descriptionEn' => $request->descriptionEn,
-            'category_id' => $request->category_id,
             'active' => true,
+            'image' => "null",
         ];
+
+        $news = News::create($data);
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $file = $image;
-            $currentTime = now();
-
-            $originalName = str_replace(' ', '_', $file->getClientOriginalName());
-
-            $filename = $currentTime->format('YmdHis') . '_' . $originalName;
-            $path = Storage::disk('public')->putFileAs('news', $file, $filename);
-//            $path = $file->storeAs('public/news', $filename);
-            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/' . $path;
-            $data['image'] = $routeImage;
+            $imagick = new Imagick($image->getPathname());
+            $imagick->setImageFormat('webp');
+            $imagick->setImageCompressionQuality(60);
+            $tempFile = tempnam(sys_get_temp_dir(), 'webp');
+            $imagick->writeImage($tempFile);
+            $filename = $news->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
+            $path = Storage::disk('public')->putFileAs('news/' . $news->id, new File($tempFile), $filename);
+            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+            $news->image = $routeImage;
+            $news->save();
+            unlink($tempFile);
         }
 
-
-        $news = News::create($data);
         return response()->json(new NewsResource($news));
 
     }
@@ -134,7 +135,6 @@ class NewsController extends Controller
             'introductionEn' => $request->introductionEn,
             'description' => $request->description,
             'descriptionEn' => $request->descriptionEn,
-            'category_id' => $request->category_id,
             'active' => true,
         ];
 

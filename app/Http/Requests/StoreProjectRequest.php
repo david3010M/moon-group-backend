@@ -33,7 +33,7 @@ class StoreProjectRequest extends StoreRequest
             'descriptionEn' => 'required|string',
             'headerImage' => 'nullable|file',
             'images' => 'required|array',
-            'images.*' => 'required|file',
+            'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
         ];
     }
 }

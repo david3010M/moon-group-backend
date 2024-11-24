@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\IndexSliderRequest;
 use App\Http\Requests\UpdateSliderRequest;
 use App\Http\Resources\SliderResource;
+use App\Models\Image;
 use App\Models\Slider;
 use App\Http\Requests\StoreSliderRequest;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Imagick;
 
 class SliderController extends Controller
 {
@@ -54,11 +59,14 @@ class SliderController extends Controller
     {
         $images = $request->file('images') ?? [];
         foreach ($images as $index => $image) {
-            $file = $image;
-            $currentTime = now();
-            $originalName = str_replace(' ', '_', $file->getClientOriginalName());
-            $filename = ($index + 1) . '-' . $currentTime->format('YmdHis') . '_' . $originalName;
-            $path = $file->storeAs('slider', $filename, 'public');
+            $filePath = $image->getPathname();
+            $imagick = new Imagick($filePath);
+            $imagick->setImageFormat('webp');
+            $imagick->setImageCompressionQuality(60);
+            $tempFile = tempnam(sys_get_temp_dir(), 'webp');
+            $imagick->writeImage($tempFile);
+            $filename = Str::random(2) . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
+            $path = Storage::disk('public')->putFileAs('slider', new File($tempFile), $filename);
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
             $dataImage = [
                 'title' => $request->title,
@@ -67,6 +75,7 @@ class SliderController extends Controller
                 'status' => 1,
             ];
             Slider::create($dataImage);
+            unlink($tempFile);
         }
         return response()->json(['message' => 'Images uploaded successfully']);
     }
@@ -116,18 +125,19 @@ class SliderController extends Controller
         ]);
         $image = $request->file('image');
         if ($request->hasFile('image')) {
-            /**
-             * if ($object->pathPhoto) {
-             * Storage::delete(str_replace('/storage/', 'public/', $object->pathPhoto));
-             * }
-             */
-            $currentTime = now();
-            $originalName = str_replace(' ', '_', $image->getClientOriginalName());
-            $filename = $currentTime->format('YmdHis') . '_' . $originalName;
-            $path = $image->storeAs('slider', $filename, 'public');
+            $filePath = $image->getPathname();
+            $imagick = new Imagick($filePath);
+            $imagick->setImageFormat('webp');
+            $imagick->setImageCompressionQuality(60);
+            $tempFile = tempnam(sys_get_temp_dir(), 'webp');
+            $imagick->writeImage($tempFile);
+            $filename = Str::random(2) . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
+            $path = Storage::disk('public')->putFileAs('slider', new File($tempFile), $filename);
             $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+            unlink($tempFile);
             $slider->update(['route' => $routeImage]);
         }
+        $slider->save();
         return response()->json(['message' => 'Slider updated successfully']);
     }
 

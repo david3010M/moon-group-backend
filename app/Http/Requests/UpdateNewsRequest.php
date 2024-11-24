@@ -31,7 +31,7 @@ class UpdateNewsRequest extends UpdateRequest
             'introductionEn' => 'nullable|string',
             'description' => 'nullable|string',
             'descriptionEn' => 'nullable|string',
-            'image' => 'nullable|file',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
             'category_id' => 'nullable|integer',
         ];
     }

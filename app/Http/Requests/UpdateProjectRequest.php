@@ -32,7 +32,7 @@ class UpdateProjectRequest extends UpdateRequest
             'descriptionEn' => 'nullable|string',
             'headerImage' => 'nullable|file',
             'images' => 'nullable|array',
-            'images.*' => 'required|file',
+            'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
         ];
     }
 }

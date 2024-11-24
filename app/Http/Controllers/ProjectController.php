@@ -65,10 +65,8 @@ class ProjectController extends Controller
             try {
                 $filePath = $image->getPathname();
                 $imagick = new Imagick($filePath);
-                if ($imagick->getImageFormat() == 'HEIC') {
-                    $imagick->setImageFormat('webp');
-                    $imagick->setImageCompressionQuality(60);
-                }
+                $imagick->setImageFormat('webp');
+                $imagick->setImageCompressionQuality(60);
                 $tempFile = tempnam(sys_get_temp_dir(), 'webp');
                 $imagick->writeImage($tempFile);
                 $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
@@ -159,10 +157,8 @@ class ProjectController extends Controller
             try {
                 $filePath = $image->getPathname();
                 $imagick = new Imagick($filePath);
-                if ($imagick->getImageFormat() == 'HEIC') {
-                    $imagick->setImageFormat('webp');
-                    $imagick->setImageCompressionQuality(60);
-                }
+                $imagick->setImageFormat('webp');
+                $imagick->setImageCompressionQuality(60);
                 $tempFile = tempnam(sys_get_temp_dir(), 'webp');
                 $imagick->writeImage($tempFile);
                 $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
