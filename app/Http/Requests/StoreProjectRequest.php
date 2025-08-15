@@ -36,4 +36,24 @@ class StoreProjectRequest extends StoreRequest
             'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
         ];
     }
+
+    protected function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $maxTotalSize = 40 * 1024 * 1024; // 40MB en bytes
+            $totalSize = 0;
+
+            if ($this->hasFile('headerImage')) {
+                $totalSize += $this->file('headerImage')->getSize();
+            }
+            if ($this->hasFile('images')) {
+                foreach ($this->file('images') as $image) {
+                    $totalSize += $image->getSize();
+                }
+            }
+            if ($totalSize > $maxTotalSize) {
+                $validator->errors()->add('images', 'El peso total de las imágenes no debe superar los 40MB.');
+            }
+        });
+    }
 }
