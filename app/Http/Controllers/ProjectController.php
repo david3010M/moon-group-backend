@@ -196,61 +196,121 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, int $id)
     {
         $project = Project::find($id);
-        if (!$project) return response()->json(['message' => 'Proyecto no encontrado'], 404);
+        if (!$project) {
+            return response()->json(['message' => 'Proyecto no encontrado'], 404);
+        }
 
         $data = [
-            'title' => $request->input('title') ?? $project->title,
-            'titleEn' => $request->input('titleEn') ?? $project->titleEn,
-            'date' => $request->input('date') ?? $project->date,
-            'introduction' => $request->input('introduction') ?? $project->introduction,
-            'introductionEn' => $request->input('introductionEn') ?? $project->introductionEn,
-            'description' => $request->input('description') ?? $project->description,
-            'descriptionEn' => $request->input('descriptionEn') ?? $project->descriptionEn,
+            'title' => $request->input('title', $project->title),
+            'titleEn' => $request->input('titleEn', $project->titleEn),
+            'date' => $request->input('date', $project->date),
+            'introduction' => $request->input('introduction', $project->introduction),
+            'introductionEn' => $request->input('introductionEn', $project->introductionEn),
+            'description' => $request->input('description', $project->description),
+            'descriptionEn' => $request->input('descriptionEn', $project->descriptionEn),
         ];
         $project->update($data);
 
+        // === NUEVAS IMÁGENES DE GALERÍA (si vienen) ===
         $images = $request->file('images') ?? [];
         foreach ($images as $image) {
             try {
-                $filePath = $image->getPathname();
-                $imagick = new Imagick($filePath);
+                $imagick = new \Imagick($image->getPathname());
+
+                // Normalizar orientación (compat con entornos sin autoOrientImage)
+                $orientation = $imagick->getImageOrientation();
+                switch ($orientation) {
+                    case \Imagick::ORIENTATION_BOTTOMRIGHT: // 180°
+                        $imagick->rotateImage(new \ImagickPixel('none'), 180);
+                        break;
+                    case \Imagick::ORIENTATION_RIGHTTOP: // 90° CW
+                        $imagick->rotateImage(new \ImagickPixel('none'), 90);
+                        break;
+                    case \Imagick::ORIENTATION_LEFTBOTTOM: // 90° CCW
+                        $imagick->rotateImage(new \ImagickPixel('none'), -90);
+                        break;
+                }
+                $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+                $imagick->stripImage();
+
+                // Convertir a WebP
                 $imagick->setImageFormat('webp');
                 $imagick->setImageCompressionQuality(60);
-                $tempFile = tempnam(sys_get_temp_dir(), 'webp');
+
+                // Guardar en tmp y luego en storage público
+                $tempFile = tempnam(sys_get_temp_dir(), 'webp_');
                 $imagick->writeImage($tempFile);
-                $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
-                $path = Storage::disk('public')->putFileAs('project/' . $project->id, new File($tempFile), $filename);
-                $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+                $imagick->clear();
+                $imagick->destroy();
+
+                $basename = str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME));
+                $filename = $project->id . '_' . $basename . '.webp';
+
+                $path = \Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+                $routeImage = \Storage::disk('public')->url($path); // <- sin concatenar dominio
+
                 Image::create([
                     'route' => $routeImage,
                     'project_id' => $project->id,
                 ]);
-                unlink($tempFile);
-            } catch (Exception $e) {
+
+                @unlink($tempFile);
+            } catch (\Throwable $e) {
                 return response()->json(['error' => 'Error al procesar el archivo: ' . $e->getMessage()], 500);
             }
         }
 
-        $image = $request->file('headerImage');
-        if (!$image && !$project->headerImage) {
-            $images = $project->images;
-            $project->headerImage = $images[0]->route;
-        } else if ($image) {
-            $imagick = new Imagick($image->getPathname());
-            $imagick->setImageFormat('webp');
-            $imagick->setImageCompressionQuality(60);
-            $tempFile = tempnam(sys_get_temp_dir(), 'webp');
-            $imagick->writeImage($tempFile);
-            $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
-            $path = Storage::disk('public')->putFileAs('project/' . $project->id, new File($tempFile), $filename);
-            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
-            $project->headerImage = $routeImage;
-            unlink($tempFile);
+        // === HEADER IMAGE ===
+        $headerFile = $request->file('headerImage');
+        if (!$headerFile && empty($project->headerImage)) {
+            $gallery = $project->images()->orderBy('id')->get();
+            if ($gallery->isNotEmpty()) {
+                $project->headerImage = $gallery->first()->route; // ya es URL completa (Storage::url)
+            }
+        } elseif ($headerFile) {
+            try {
+                $imagick = new \Imagick($headerFile->getPathname());
+
+                $orientation = $imagick->getImageOrientation();
+                switch ($orientation) {
+                    case \Imagick::ORIENTATION_BOTTOMRIGHT:
+                        $imagick->rotateImage(new \ImagickPixel('none'), 180);
+                        break;
+                    case \Imagick::ORIENTATION_RIGHTTOP:
+                        $imagick->rotateImage(new \ImagickPixel('none'), 90);
+                        break;
+                    case \Imagick::ORIENTATION_LEFTBOTTOM:
+                        $imagick->rotateImage(new \ImagickPixel('none'), -90);
+                        break;
+                }
+                $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+                $imagick->stripImage();
+
+                $imagick->setImageFormat('webp');
+                $imagick->setImageCompressionQuality(60);
+
+                $tempFile = tempnam(sys_get_temp_dir(), 'webp_');
+                $imagick->writeImage($tempFile);
+                $imagick->clear();
+                $imagick->destroy();
+
+                $basename = str_replace(' ', '_', pathinfo($headerFile->getClientOriginalName(), PATHINFO_FILENAME));
+                $filename = $project->id . '_' . $basename . '.webp';
+
+                $path = \Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+                $project->headerImage = \Storage::disk('public')->url($path); // <- sin concatenar dominio
+
+                @unlink($tempFile);
+            } catch (\Throwable $e) {
+                return response()->json(['error' => 'Error al procesar el headerImage: ' . $e->getMessage()], 500);
+            }
         }
+
         $project->save();
 
         return response()->json(['message' => 'Project updated successfully']);
     }
+
 
     /**
      * @OA\Delete (
