@@ -32,3 +32,10 @@ Route::get('/_imagick_check', function () {
     ]);
 });
 
+Route::get('/_limits', fn() => [
+    'sapi' => php_sapi_name(),
+    'post_max_size' => ini_get('post_max_size'),
+    'upload_max_filesize' => ini_get('upload_max_filesize'),
+    'max_file_uploads' => ini_get('max_file_uploads'),
+]);
+
