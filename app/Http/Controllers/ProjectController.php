@@ -63,21 +63,29 @@ class ProjectController extends Controller
         $images = $request->file('images') ?? [];
         foreach ($images as $image) {
             try {
-                $filePath = $image->getPathname();
-                $imagick = new Imagick($filePath);
+                $imagick = new \Imagick($image->getPathname());
+                $imagick->autoOrientImage();
+                $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+                $imagick->stripImage();
                 $imagick->setImageFormat('webp');
                 $imagick->setImageCompressionQuality(60);
+
                 $tempFile = tempnam(sys_get_temp_dir(), 'webp');
                 $imagick->writeImage($tempFile);
-                $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
-                $path = Storage::disk('public')->putFileAs('project/' . $project->id, new File($tempFile), $filename);
-                $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
+                $imagick->clear();
+                $imagick->destroy();
+
+                $filename = $project->id . '_' . str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.webp';
+                $path = Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+                $routeImage = Storage::disk('public')->url($path);
+
                 Image::create([
                     'route' => $routeImage,
                     'project_id' => $project->id,
                 ]);
-                unlink($tempFile);
-            } catch (Exception $e) {
+
+                @unlink($tempFile);
+            } catch (\Throwable $e) {
                 return response()->json(['error' => 'Error al procesar el archivo: ' . $e->getMessage()], 500);
             }
         }
@@ -85,19 +93,29 @@ class ProjectController extends Controller
         $image = $request->file('headerImage');
         if (!$image) {
             $images = $project->images;
-            $project->headerImage = $images[0]->route;
+            if ($images->isNotEmpty()) {
+                $project->headerImage = $images->first()->route;
+            }
         } else {
-            $imagick = new Imagick($image->getPathname());
+            $imagick = new \Imagick($image->getPathname());
+            $imagick->autoOrientImage();
+            $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+            $imagick->stripImage();
             $imagick->setImageFormat('webp');
             $imagick->setImageCompressionQuality(60);
+
             $tempFile = tempnam(sys_get_temp_dir(), 'webp');
             $imagick->writeImage($tempFile);
-            $filename = $project->id . '_' . str_replace(' ', '_', explode('.', $image->getClientOriginalName())[0]) . '.webp';
-            $path = Storage::disk('public')->putFileAs('project/' . $project->id, new File($tempFile), $filename);
-            $routeImage = 'https://develop.garzasoft.com/moon-group-backend/storage/app/public/' . $path;
-            $project->headerImage = $routeImage;
-            unlink($tempFile);
+            $imagick->clear();
+            $imagick->destroy();
+
+            $filename = $project->id . '_' . str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.webp';
+            $path = Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+            $project->headerImage = Storage::disk('public')->url($path);
+
+            @unlink($tempFile);
         }
+
         $project->save();
 
         return response()->json(['message' => 'Project created successfully'], 201);
