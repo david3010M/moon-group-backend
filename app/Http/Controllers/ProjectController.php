@@ -60,24 +60,43 @@ class ProjectController extends Controller
     {
         $project = Project::create($request->validated());
 
+        // === IMÁGENES DEL GALERÍA ===
         $images = $request->file('images') ?? [];
         foreach ($images as $image) {
             try {
                 $imagick = new \Imagick($image->getPathname());
-                $imagick->autoOrientImage();
+
+                // Normalizar orientación (equivalente a autoOrientImage en entornos antiguos)
+                $orientation = $imagick->getImageOrientation();
+                switch ($orientation) {
+                    case \Imagick::ORIENTATION_BOTTOMRIGHT: // 180°
+                        $imagick->rotateImage(new \ImagickPixel('none'), 180);
+                        break;
+                    case \Imagick::ORIENTATION_RIGHTTOP: // 90° CW
+                        $imagick->rotateImage(new \ImagickPixel('none'), 90);
+                        break;
+                    case \Imagick::ORIENTATION_LEFTBOTTOM: // 90° CCW
+                        $imagick->rotateImage(new \ImagickPixel('none'), -90);
+                        break;
+                }
                 $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
                 $imagick->stripImage();
+
+                // Convertir a WebP
                 $imagick->setImageFormat('webp');
                 $imagick->setImageCompressionQuality(60);
 
-                $tempFile = tempnam(sys_get_temp_dir(), 'webp');
+                // Guardar en tmp y luego en storage
+                $tempFile = tempnam(sys_get_temp_dir(), 'webp_');
                 $imagick->writeImage($tempFile);
                 $imagick->clear();
                 $imagick->destroy();
 
-                $filename = $project->id . '_' . str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.webp';
-                $path = Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
-                $routeImage = Storage::disk('public')->url($path);
+                $basename = str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME));
+                $filename = $project->id . '_' . $basename . '.webp';
+
+                $path = \Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+                $routeImage = \Storage::disk('public')->url($path);
 
                 Image::create([
                     'route' => $routeImage,
@@ -90,30 +109,50 @@ class ProjectController extends Controller
             }
         }
 
-        $image = $request->file('headerImage');
-        if (!$image) {
+        // === HEADER IMAGE ===
+        $headerFile = $request->file('headerImage');
+        if (!$headerFile) {
             $images = $project->images;
             if ($images->isNotEmpty()) {
                 $project->headerImage = $images->first()->route;
             }
         } else {
-            $imagick = new \Imagick($image->getPathname());
-            $imagick->autoOrientImage();
-            $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
-            $imagick->stripImage();
-            $imagick->setImageFormat('webp');
-            $imagick->setImageCompressionQuality(60);
+            try {
+                $imagick = new \Imagick($headerFile->getPathname());
 
-            $tempFile = tempnam(sys_get_temp_dir(), 'webp');
-            $imagick->writeImage($tempFile);
-            $imagick->clear();
-            $imagick->destroy();
+                $orientation = $imagick->getImageOrientation();
+                switch ($orientation) {
+                    case \Imagick::ORIENTATION_BOTTOMRIGHT:
+                        $imagick->rotateImage(new \ImagickPixel('none'), 180);
+                        break;
+                    case \Imagick::ORIENTATION_RIGHTTOP:
+                        $imagick->rotateImage(new \ImagickPixel('none'), 90);
+                        break;
+                    case \Imagick::ORIENTATION_LEFTBOTTOM:
+                        $imagick->rotateImage(new \ImagickPixel('none'), -90);
+                        break;
+                }
+                $imagick->setImageOrientation(\Imagick::ORIENTATION_TOPLEFT);
+                $imagick->stripImage();
 
-            $filename = $project->id . '_' . str_replace(' ', '_', pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.webp';
-            $path = Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
-            $project->headerImage = Storage::disk('public')->url($path);
+                $imagick->setImageFormat('webp');
+                $imagick->setImageCompressionQuality(60);
 
-            @unlink($tempFile);
+                $tempFile = tempnam(sys_get_temp_dir(), 'webp_');
+                $imagick->writeImage($tempFile);
+                $imagick->clear();
+                $imagick->destroy();
+
+                $basename = str_replace(' ', '_', pathinfo($headerFile->getClientOriginalName(), PATHINFO_FILENAME));
+                $filename = $project->id . '_' . $basename . '.webp';
+
+                $path = \Storage::disk('public')->putFileAs('project/' . $project->id, new \Illuminate\Http\File($tempFile), $filename);
+                $project->headerImage = \Storage::disk('public')->url($path);
+
+                @unlink($tempFile);
+            } catch (\Throwable $e) {
+                return response()->json(['error' => 'Error al procesar el headerImage: ' . $e->getMessage()], 500);
+            }
         }
 
         $project->save();
