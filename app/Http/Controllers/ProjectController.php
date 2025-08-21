@@ -58,7 +58,15 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = Project::create($request->validated());
+        $data= $request->validated();
+        $data = [
+            'titleEn' => $data['titleEn'] ?? " ",
+            'introductionEn' => $data['introductionEn'] ?? " ",
+            'descriptionEn' => $data['descriptionEn'] ?? " ",
+            ...$data
+        ];
+
+        $project = Project::create($data);
 
         // === IMÁGENES DEL GALERÍA ===
         $images = $request->file('images') ?? [];
@@ -202,12 +210,12 @@ class ProjectController extends Controller
 
         $data = [
             'title' => $request->input('title', $project->title),
-            'titleEn' => $request->input('titleEn', $project->titleEn),
+            'titleEn' => $request->titleEn ?? " ",
             'date' => $request->input('date', $project->date),
             'introduction' => $request->input('introduction', $project->introduction),
-            'introductionEn' => $request->input('introductionEn', $project->introductionEn),
+            'introductionEn' => $request->introductionEn ?? " ",
             'description' => $request->input('description', $project->description),
-            'descriptionEn' => $request->input('descriptionEn', $project->descriptionEn),
+            'descriptionEn' => $request->descriptionEn ?? " ",
         ];
         $project->update($data);
 
