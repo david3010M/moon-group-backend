@@ -8,11 +8,6 @@ use App\Models\Image;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-use Imagick;
-use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\ImageManager;
 
 class ProjectController extends Controller
 {
@@ -58,12 +53,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $data= $request->validated();
         $data = [
+            ...$request->validated(),
             'titleEn' => $data['titleEn'] ?? " ",
             'introductionEn' => $data['introductionEn'] ?? " ",
             'descriptionEn' => $data['descriptionEn'] ?? " ",
-            ...$data
         ];
 
         $project = Project::create($data);
@@ -209,12 +203,9 @@ class ProjectController extends Controller
         }
 
         $data = [
-            'title' => $request->input('title', $project->title),
+            ...$request->validated(),
             'titleEn' => $request->titleEn ?? " ",
-            'date' => $request->input('date', $project->date),
-            'introduction' => $request->input('introduction', $project->introduction),
             'introductionEn' => $request->introductionEn ?? " ",
-            'description' => $request->input('description', $project->description),
             'descriptionEn' => $request->descriptionEn ?? " ",
         ];
         $project->update($data);

@@ -57,10 +57,10 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
         $data = [
-            'titleEn' => $request->titleEn ?? " ",
-            'introductionEn' => $request->introductionEn ?? " ",
-            'descriptionEn' => $request->descriptionEn ?? " ",
             ...$request->validated(),
+            'titleEn' => $data->titleEn ?? " ",
+            'introductionEn' => $data->introductionEn ?? " ",
+            'descriptionEn' => $data->descriptionEn ?? " ",
         ];
 
         $news = News::create($data);
@@ -123,10 +123,10 @@ class NewsController extends Controller
         if (!$news) return response()->json(['error' => 'Noticia no encontrada'], 404);
 
         $data = [
+            ...$request->validated(),
             'titleEn' => $request->titleEn ?? " ",
             'introductionEn' => $request->introductionEn ?? " ",
             'descriptionEn' => $request->descriptionEn ?? " ",
-            $request->validated(),
         ];
 
         if ($request->hasFile('image')) {
