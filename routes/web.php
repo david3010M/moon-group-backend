@@ -18,6 +18,12 @@ Route::get('/', function () {
 });
 
 // routes/web.php
+Route::get('/__phpinfo', function () {
+    phpinfo();
+});
+
+
+// routes/web.php
 Route::get('/_imagick_check', function () {
     $ok = class_exists(\Imagick::class);
     $ver = $ok ? (new \Imagick())->getVersion() : null;

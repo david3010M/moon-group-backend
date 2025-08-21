@@ -25,12 +25,12 @@ class StoreNewsRequest extends StoreRequest
     {
         return [
             'title' => 'required|string',
-            'titleEn' => 'required|string',
+            'titleEn' => 'nullable|string',
             'date' => 'required|date',
             'introduction' => 'required|string',
-            'introductionEn' => 'required|string',
+            'introductionEn' => 'nullable|string',
             'description' => 'required|string',
-            'descriptionEn' => 'required|string',
+            'descriptionEn' => 'nullable|string',
             'image' => 'required|file|mimes:jpeg,png,jpg,gif,heic,webp,svg,avif,heif,ico,cur,apng',
             'category_id' => 'nullable|integer',
         ];
